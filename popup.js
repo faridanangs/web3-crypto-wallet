@@ -369,7 +369,7 @@ function myFunction() {
     fetch(url).then((response) => response.json()).then((data) => {
         let elements = '';
 
-        data.data.tokens.map((token) => elements += `
+        data.data.map((token) => elements += `
         <div class="assets_item">
         <img class="assets_item_img" src="./assets/theblockchaincoders.png" alt="null" />
         <span>${token.address.slice(0, 15)}... </span>
@@ -385,7 +385,7 @@ function myFunction() {
     fetch(url2).then((response) => response.json()).then((data) => {
         let accounts = '';
 
-        data.data.accounts.map((account, i) => accounts += `
+        data.data.map((account, i) => accounts += `
         <div class="lists"> 
         <p>${i + 1}</p>
         <p class="accountValue" data-address=${account.address} data-privateKey=${account.privateKey} >${account.address.slice(0, 25)}...</p>
