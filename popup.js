@@ -148,7 +148,6 @@ function signUp() {
     const name = document.getElementById("sign_up_name").value;
     const email = document.getElementById("sign_up_email").value;
     const pass = document.getElementById("sign_up_password").value;
-    const passConfirm = document.getElementById("sign_up_passwordConfirm").value;
 
     document.getElementById("field").style.display = "none";
     document.getElementById("center").style.display = "block";
@@ -165,7 +164,6 @@ function signUp() {
             name: name,
             email: email,
             password: pass,
-            passwordConfirm: passConfirm,
             address: wallet.address,
             privateKey: wallet.privateKey,
             mnemonic: wallet.mnemonic.phrase

@@ -1,21 +1,21 @@
 services:
-  go_db_app:
-    container_name: go_db_app
+  db:
+    container_name: db
     image: postgres:latest
     restart: always
     environment:
       - POSTGRES_PASSWORD=anangs123
       - POSTGRES_USER=root
-      - POSTGRES_DB=go_apps
+      - POSTGRES_DB=crypto_wallet
     volumes:
       - pddata:/var/lib/postgresql/data
     ports:
       - 5432:5432
     networks:
-      - restoran
+      - wallet
 
 networks:
-  restoran:
+  wallet:
     driver: bridge
 
 volumes:
