@@ -13,13 +13,13 @@ import (
 
 func SignUp(c *fiber.Ctx) error {
 	db := db.ConnectDB()
-	validate := validator.New()
+	// validate := validator.New()
 	userModel := model.User{}
 	c.BodyParser(&userModel)
 
-	if err := validate.Struct(&userModel); err != nil {
-		return c.Status(400).SendString("Invalid Request")
-	}
+	// if err := validate.Struct(&userModel); err != nil {
+	// 	return c.Status(400).SendString("Invalid Request")
+	// }
 
 	passwordHash, _ := bcrypt.GenerateFromPassword([]byte(userModel.Password), 14)
 
@@ -36,7 +36,10 @@ func SignUp(c *fiber.Ctx) error {
 		return c.Status(500).SendString("Error creating user: " + err.Error())
 	}
 
-	return c.Status(200).SendString("User created successfully")
+	return c.Status(200).JSON(fiber.Map{
+		"code":    200,
+		"message": "created account successfully",
+	})
 }
 
 func LogIn(c *fiber.Ctx) error {

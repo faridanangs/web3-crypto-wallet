@@ -34,20 +34,23 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("open_activity").addEventListener("click", openActivity)
 
     document.getElementById("goHomePage").addEventListener("click", goHomePage)
+    
+    document.getElementById("goBack_import").addEventListener("click", importGoBack)
 
     document.getElementById("openAccountImport").addEventListener("click", openImportModel)
 
-    document.getElementById("close_import_account").addEventListener("click", closeImportModel)
+    // document.getElementById("close_import_account").addEventListener("click", closeImportModel)
 
     document.getElementById("add_new_token").addEventListener("click", addToken)
 
-    document.getElementById("add_New_Account").addEventListener("click", addAccount)
+    // document.getElementById("add_New_Account").addEventListener("click", addAccount)
 
 
 })
 
+
 // State Variable
-let providerUrl = 'https://polygon-amoy.g.alchemy.com/v2/DbekPS-UnOwBTkvTWdGUhr-PKKu8ovjp';
+let providerUrl = 'https://polygon-amoy-bor-rpc.publicnode.com';
 
 let provider;
 let privateKey;
@@ -73,14 +76,13 @@ function handler() {
         value: ethers.utils.parseEther(amount),
     }
 
-    let a = document.getElementById("link");
-    a.href = 'somelink url'
-
     wallet.sendTransaction(tx).then((txObj) => {
         console.log("txhsh: ", txObj.hash);
-
+        
         document.getElementById("transfer_center").style.display = "none";
         const a = document.getElementById("link");
+        
+        a.href = `https://amoy.polygonscan.com/tx/${txObj.hash}`
 
         document.getElementById("link").style.display = "block";
     })
@@ -88,7 +90,7 @@ function handler() {
 
 function checkBalance(address) {
     const provider = new ethers.providers.JsonRpcProvider(providerUrl);
-    provider.getBalane(address).then((bal) => {
+    provider.getBalance(address).then((bal) => {
         const balanceInEth = ethers.utils.formatEther(bal);
 
         document.getElementById("accountBlance").innerHTML = `${balanceInEth} MATIC`
@@ -141,6 +143,7 @@ function createUser() {
 
 function openCreate() {
     document.getElementById("createAccount").style.display = "none";
+    console.log("gblk")
     document.getElementById("create_popUp").style.display = "block";
 };
 
@@ -158,7 +161,7 @@ function signUp() {
         console.log(wallet, "wallet");
 
         // API CALL
-        const url = "http://localhost:3000/api/v1/user/signup";
+        const url = "http://localhost:3301/api/v1/user/signup";
 
         const data = {
             name: name,
@@ -178,7 +181,7 @@ function signUp() {
         }).then((resp) => resp.json()).then((result) => {
             document.getElementById("createdAddress").innerHTML = wallet.address;
             document.getElementById("createdPrivateKey").innerHTML = wallet.privateKey;
-            document.getElementById("createdMnmonic").innerHTML = wallet.mnemonic.phrase;
+            document.getElementById("createdMnemonic").innerHTML = wallet.mnemonic.phrase;
 
             document.getElementById("center").style.display = "none";
             document.getElementById("accountData").style.display = "block";
@@ -209,8 +212,11 @@ function logIn() {
     const email = document.getElementById("login_email").value;
     const pass = document.getElementById("login_password").value;
 
+    console.log(email, "email")
+    console.log(pass, "pass")
+
     // API CALL
-    const url = "http://localhost:3000/api/v1/users/login"
+    const url = "http://localhost:3301/api/v1/user/login"
     const data = {
         email: email,
         password: pass
@@ -226,13 +232,14 @@ function logIn() {
         console.log(result, "result");
 
         const userWallet = {
-            address: result.data.user.address,
-            private_key: result.data.user.private_key,
-            mnemonic: result.data.user.mnemonic
+            address: result.data.address,
+            private_key: result.data.private_key,
+            mnemonic: result.data.mnemonic
         }
 
         const jsonObj = JSON.stringify(userWallet);
         localStorage.setItem("userWallet", jsonObj);
+        window.location.reload();
 
     }).catch((e) => {
         console.log("ERROR: ", e)
@@ -245,12 +252,12 @@ function logout() {
 };
 
 function openTransfer() {
-    document.getElementById("transfer_from").style.display = "block";
+    document.getElementById("transfer_form").style.display = "block";
     document.getElementById("home").style.display = "none";
 };
 
 function goBack() {
-    document.getElementById("transfer_from").style.display = "none";
+    document.getElementById("transfer_form").style.display = "none";
     document.getElementById("home").style.display = "block";
 };
 
@@ -295,7 +302,7 @@ function addToken() {
     const name = document.getElementById("token_name").value;
 
     // API CALL
-    const url = "http://localhost:3000/api/v1/tokens/createtoken";
+    const url = "http://localhost:3301/api/v1/tokens/createtoken";
     const data = {
         address: address,
         symbol: symbol,
@@ -326,7 +333,7 @@ function addAccount() {
 
     console.log(wallet, "wallet add acount");
 
-    const url = "http://localhost:3000/api/v1/account/createaccount";
+    const url = "http://localhost:3301/api/v1/account/createaccount";
     const data = {
         private_key: privateKey,
         address: wallet.address
@@ -347,10 +354,13 @@ function addAccount() {
 };
 
 function myFunction() {
+
+    
     const str = localStorage.getItem("userWallet");
     const parseObj = JSON.parse(str);
-
-    if (parseObj.address) {
+    
+    console.log(parseObj.address, "oaos")
+    if (parseObj?.address) {
         document.getElementById("LoginUser").style.display = "none";
         document.getElementById("home").style.display = "block";
 
@@ -363,7 +373,7 @@ function myFunction() {
     const tokenRender = document.querySelector(".assets");
     const accountRender = document.querySelector(".accountList");
 
-    const url = "http://localhost:3000/api/v1/tokens/alltoken";
+    const url = "http://localhost:3301/api/v1/tokens/alltoken";
     fetch(url).then((response) => response.json()).then((data) => {
         let elements = '';
 
@@ -379,9 +389,10 @@ function myFunction() {
         console.log("ERROR: " + e)
     })
 
-    const url2 = "http://localhost:3000/api/v1/account/allaccount";
+    const url2 = "http://localhost:3301/api/v1/account/allaccount";
     fetch(url2).then((response) => response.json()).then((data) => {
         let accounts = '';
+
 
         data.data.map((account, i) => accounts += `
         <div class="lists"> 

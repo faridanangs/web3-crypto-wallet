@@ -3,12 +3,12 @@ package model
 import "github.com/dgrijalva/jwt-go"
 
 type User struct {
-	Name       string `json:"name" gorm:"type:varchar(100);not null" validate:"required,min=2,max=100"`
-	Email      string `json:"email" gorm:"type:varchar(100);uniqueIndex;not null" validate:"required,email"`
-	Password   string `json:"password" gorm:"type:varchar(100);not null" validate:"required,min=8"`
-	Address    string `json:"address" gorm:"type:varchar(100);not null" validate:"required"`
-	PrivateKey string `json:"privateKey" gorm:"type:varchar(100);not null" validate:"required"`
-	Mnemonic   string `json:"mnemonic" gorm:"type:text;not null" validate:"required"`
+	Name       string `gorm:"type:varchar(100);not null" validate:"required,min=2,max=100"`
+	Email      string `gorm:"type:varchar(100);uniqueIndex;not null" validate:"required,email"`
+	Password   string `gorm:"type:varchar(100);not null" validate:"required,min=8"`
+	Address    string `gorm:"type:varchar(100);not null" validate:"required"`
+	PrivateKey string `gorm:"type:varchar(100);not null" validate:"required"`
+	Mnemonic   string `gorm:"type:varchar(200);not null" validate:"required"`
 }
 
 type Token struct {
