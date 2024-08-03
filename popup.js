@@ -34,16 +34,16 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("open_activity").addEventListener("click", openActivity)
 
     document.getElementById("goHomePage").addEventListener("click", goHomePage)
-    
+
     document.getElementById("goBack_import").addEventListener("click", importGoBack)
 
     document.getElementById("openAccountImport").addEventListener("click", openImportModel)
 
-    // document.getElementById("close_import_account").addEventListener("click", closeImportModel)
+    document.getElementById("close_import_account").addEventListener("click", closeImportModel)
 
     document.getElementById("add_new_token").addEventListener("click", addToken)
 
-    // document.getElementById("add_New_Account").addEventListener("click", addAccount)
+    document.getElementById("add_New_Account").addEventListener("click", addAccount)
 
 
 })
@@ -55,6 +55,7 @@ let providerUrl = 'https://polygon-amoy-bor-rpc.publicnode.com';
 let provider;
 let privateKey;
 let address;
+let tokenJwt;
 
 // Function
 function handler() {
@@ -62,9 +63,6 @@ function handler() {
 
     const amount = document.getElementById("amount").value;
     const address = document.getElementById("address").value;
-
-    const private_key = 'd2af200fa84bf95e9223a787ad334993c0527b65b712df6c82b45e01fc5ad9a2'
-    const testAccount = '0x4BB6Fe85e332Fe6c54EE447fd3a68506A72e1f7e'
 
     // Provider
     const provider = new ethers.providers.JsonRpcProvider(providerUrl);
@@ -77,11 +75,9 @@ function handler() {
     }
 
     wallet.sendTransaction(tx).then((txObj) => {
-        console.log("txhsh: ", txObj.hash);
-        
         document.getElementById("transfer_center").style.display = "none";
         const a = document.getElementById("link");
-        
+
         a.href = `https://amoy.polygonscan.com/tx/${txObj.hash}`
 
         document.getElementById("link").style.display = "block";
@@ -93,8 +89,7 @@ function checkBalance(address) {
     provider.getBalance(address).then((bal) => {
         const balanceInEth = ethers.utils.formatEther(bal);
 
-        document.getElementById("accountBlance").innerHTML = `${balanceInEth} MATIC`
-        document.getElementById("userAddress").innerHTML = `${address.slice(0, 15)}...`
+        document.getElementById("accountBlance").innerHTML = `${balanceInEth.slice(0,14)} MATIC`
     })
 
 };
@@ -122,8 +117,6 @@ function getSelectedNetwork(e) {
         providerUrl = "https://rpc.ankr.com/eth_sepolia"
         document.getElementById("network").style.display = "none";
     }
-
-    console.log(providerUrl, "provier url")
 };
 
 function setNetwork() {
@@ -143,7 +136,6 @@ function createUser() {
 
 function openCreate() {
     document.getElementById("createAccount").style.display = "none";
-    console.log("gblk")
     document.getElementById("create_popUp").style.display = "block";
 };
 
@@ -158,8 +150,6 @@ function signUp() {
     const wallet = ethers.Wallet.createRandom();
 
     if (wallet.address) {
-        console.log(wallet, "wallet");
-
         // API CALL
         const url = "http://localhost:3301/api/v1/user/signup";
 
@@ -206,14 +196,9 @@ function signUp() {
 };
 
 function logIn() {
-    document.getElementById("login_form").style.display = "none";
-    document.getElementById("center").style.display = "block";
 
     const email = document.getElementById("login_email").value;
     const pass = document.getElementById("login_password").value;
-
-    console.log(email, "email")
-    console.log(pass, "pass")
 
     // API CALL
     const url = "http://localhost:3301/api/v1/user/login"
@@ -234,7 +219,8 @@ function logIn() {
         const userWallet = {
             address: result.data.address,
             private_key: result.data.private_key,
-            mnemonic: result.data.mnemonic
+            mnemonic: result.data.mnemonic,
+            token: result.token
         }
 
         const jsonObj = JSON.stringify(userWallet);
@@ -312,7 +298,8 @@ function addToken() {
     fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${tokenJwt}`
         },
         body: JSON.stringify(data)
     }).then((resp) => resp.json()).then((result) => {
@@ -331,8 +318,6 @@ function addAccount() {
 
     let wallet = new ethers.Wallet(privateKey, provider);
 
-    console.log(wallet, "wallet add acount");
-
     const url = "http://localhost:3301/api/v1/account/createaccount";
     const data = {
         private_key: privateKey,
@@ -342,11 +327,13 @@ function addAccount() {
     fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${tokenJwt}`
         },
         body: JSON.stringify(data)
     }).then((resp) => resp.json()).then((result) => {
-        console.log(result, "result");
+        window.location.reload();
+
     }).catch((e) => {
         console.log("ERROR: ", e)
     })
@@ -354,18 +341,16 @@ function addAccount() {
 };
 
 function myFunction() {
-
-    
     const str = localStorage.getItem("userWallet");
     const parseObj = JSON.parse(str);
-    
-    console.log(parseObj.address, "oaos")
+
     if (parseObj?.address) {
         document.getElementById("LoginUser").style.display = "none";
         document.getElementById("home").style.display = "block";
 
         privateKey = parseObj.private_key;
         address = parseObj.address;
+        tokenJwt = parseObj.token
 
         checkBalance(parseObj.address);
     }
@@ -379,9 +364,10 @@ function myFunction() {
 
         data.data.map((token) => elements += `
         <div class="assets_item">
-        <img class="assets_item_img" src="./assets/theblockchaincoders.png" alt="null" />
+        <img class="assets_item_img" src="./assets/logo.webp" alt="null" />
         <span>${token.address.slice(0, 15)}... </span>
         <span>${token.symbol}</span>
+        </div>
         `);
 
         tokenRender.innerHTML = elements;
@@ -393,12 +379,11 @@ function myFunction() {
     fetch(url2).then((response) => response.json()).then((data) => {
         let accounts = '';
 
-
         data.data.map((account, i) => accounts += `
         <div class="lists"> 
         <p>${i + 1}</p>
-        <p class="accountValue" data-address=${account.address} data-privateKey=${account.privateKey} >${account.address.slice(0, 25)}...</p>
-        `)
+        <p class="accountValue" data-address=${account.address} data-privateKey=${account.private_key} >${account.address.slice(0, 25)}...</p>
+        </div>`)
 
         accountRender.innerHTML = accounts;
 
@@ -406,27 +391,29 @@ function myFunction() {
         console.log("Error", e)
     })
 
-    console.log(privateKey, "private key")
-
 };
 
 function copyAddress() {
     navigator.clipboard.writeText(address);
 };
 
-function changeAccount() {
-    const data = document.querySelector(".accountValue");
-    const address = data.getAttribute("data-address");
-    const privateKey = data.getAttribute("data-privateKey");
+function changeAccount(event) {
 
-    const userWallet = {
-        address: address,
-        private_key: privateKey,
-        mnemonic: "Changed"
+
+    if (event.target.classList.contains("accountValue")) {
+        const address = event.target.getAttribute("data-address");
+        const privateKey = event.target.getAttribute("data-privateKey");
+
+        const userWallet = {
+            address: address,
+            private_key: privateKey,
+            mnemonic: "Changed",
+            token: tokenJwt
+        }
+        const jsonObj = JSON.stringify(userWallet);
+        localStorage.setItem("userWallet", jsonObj);
+        window.location.reload();
     }
-    const jsonObj = JSON.stringify(userWallet);
-    localStorage.setItem("userWallet", jsonObj);
-    window.location.reload();
 };
 
 

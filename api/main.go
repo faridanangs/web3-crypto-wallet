@@ -12,7 +12,7 @@ func main() {
 	app := fiber.New()
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
-		AllowMethods: "GET,POST",
+		AllowMethods: "GET,POST, DELETE",
 	}))
 
 	api := app.Group("/api/v1")

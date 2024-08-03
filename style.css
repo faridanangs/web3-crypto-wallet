@@ -1,7 +1,8 @@
 body {
-  width: 22rem;
+  width: 20rem;
   margin: 0;
   padding: 0;
+  color: #000;
 }
 
 ::-webkit-scrollbar {
@@ -26,13 +27,13 @@ body {
 #heading {
   text-align: center;
   margin: 2em;
-  color: rgb(0, 255, 200);
+  color: rgb(0, 0, 0);
   font-size: 1.2rem;
 }
 
 .header_network p {
-  border: 1px solid #00642f;
-  color: #00642f;
+  border: 1px solid #000000;
+  color: #000000;
   font-weight: bold;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
@@ -48,20 +49,29 @@ body {
 .network {
   display: none;
   position: absolute;
-  background-color: #1f1f1f;
+  background-color: rgba(255, 255, 255, 0.771);
+  backdrop-filter: blur(100px);
+  z-index: 100;
   width: 100%;
   right: 0;
   text-align: center;
+  color: #000;
 }
 
 .network .addStyle {
   padding: 1rem 8rem;
-  margin-top: 1rem;
+  margin: 1rem 0rem 0;
+
+}
+
+.network_title p{
+  font-size: 1.3rem;
+  color: black;
 }
 
 .network_title {
-  font-size: 1.3rem;
-  border: 1px solid rgb(0, 255, 200);
+  border: 1px solid rgb(0, 0, 0);
+  padding: 3px 0;
 }
 
 .network_item {
@@ -71,23 +81,25 @@ body {
   grid-template-columns: 1fr 3fr;
   cursor: pointer;
   place-content: start;
+  color: black;
 }
 
 /* Home screen */
 .home_screen_signup {
   margin: 0 auto;
-  background-color: #1f1f1f;
+  background-color: rgba(255, 255, 255, 0.771);
+  backdrop-filter: blur(100px);
   text-align: center;
   padding: 2rem;
   display: none;
 }
 .home_screen_login {
   margin: 0 auto;
-  background-color: #171717;
   text-align: center;
   padding: 2rem;
   display: block;
-  /* display: none; */
+  background-color: rgba(255, 255, 255, 0.771);
+  backdrop-filter: blur(100px);
 }
 
 .home_screen_img {
@@ -96,9 +108,21 @@ body {
 }
 
 .home_title {
-  color: rgb(0, 255, 200);
+  color: rgb(0, 0, 0);
   font-size: 1.2rem;
   cursor: pointer;
+}
+
+.form_footer {
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form_footer_main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .import_account .connectWallet,
@@ -119,32 +143,42 @@ body {
 .home_header p,
 .home_screen_login p,
 .home_screen_signup p {
-  background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
+  background-image: linear-gradient(163deg, #5e5e5e 0%, #232223 100%);
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+.home_header .copy_address {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+}
+
 .create_popUp {
   margin: 0 auto;
-  background-color: #171717;
+  background-color: rgba(255, 255, 255, 0.771);
+  backdrop-filter: blur(100px);
   text-align: center;
   padding: 2rem;
   display: none;
-  color: rgb(0, 255, 200);
+  color: rgb(0, 0, 0);
   text-align: center;
 }
 
 /* Form */
 .transfer_form {
   display: none;
+  background-color: rgba(255, 255, 255, 0.771);
+  backdrop-filter: blur(100px);
 }
 
 .form {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 0 2em 0.4em 2em;
-  background-color: #171717;
+  padding: 0 1em 0.4em 1em;
+  background-color: transparent;
 }
 
 .field {
@@ -156,15 +190,15 @@ body {
   padding: 0.6em;
   border: none;
   outline: none;
-  color: white;
-  background-color: #171717;
-  box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+  color: black;
+  background-color: #ffffff;
+  box-shadow: inset 2px 5px 10px rgb(171, 171, 171);
 }
 
 .input-icon {
   height: 1.3em;
   width: 1.3em;
-  fill: rgb(0, 255, 200);
+  fill: rgb(0, 0, 0);
 }
 
 .input-field {
@@ -172,7 +206,7 @@ body {
   border: none;
   outline: none;
   width: 100%;
-  color: rgb(0, 255, 200);
+  color: rgb(0, 0, 0);
 }
 
 .form .btn {
@@ -220,22 +254,24 @@ body {
 
 .button3 {
   margin-bottom: 3em;
-  padding: 0.5em;
+  padding: 1rem 0.5em;
   border-radius: 5px;
   border: none;
   outline: none;
   transition: 0.4s ease-in-out;
-  background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
-  color: rgb(5, 5, 5);
+  background-image: linear-gradient(163deg, #7e7e7e 0%, #414141 100%);
+  color: rgb(255, 255, 255);
+  width: 100%;
 }
 
 .button3:hover {
-  background-image: linear-gradient(163deg, #a00000fa 0%, #d10050 100%);
+  background-image: linear-gradient(163deg, #4e4e4efa 0%, #191919 100%);
   color: rgb(255, 255, 255);
 }
 
 .card {
-  background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
+  /* background-image: linear-gradient(163deg, #008d42 0%, #3700ff 100%); */
+  background-image: linear-gradient(163deg, #ffffff 0%, #393939 100%);
   transition: all 0.3s;
 }
 
@@ -245,12 +281,12 @@ body {
 }
 
 .card2:hover {
-  transform: scale(0.98);
+  transform: scale(0.99);
   border-radius: 20px;
 }
 
 .card:hover {
-  box-shadow: 0px 0px 30px 1px rgba(0, 255, 117, 0.3);
+  box-shadow: 0px 0px 30px 1px rgba(26, 26, 26, 0.3);
 }
 
 /* Notification */
@@ -263,7 +299,7 @@ p {
 
 a {
   text-decoration: none;
-  color: rgb(0, 255, 200);
+  color: rgb(0, 0, 0);
   display: none;
 }
 
@@ -366,14 +402,15 @@ textarea {
 
 .home {
   margin: 0 auto;
-  background-color: #171717;
+  background-color: rgba(255, 255, 255, 0.771);
+  backdrop-filter: blur(100px);
   text-align: center;
   padding: 1rem 2rem;
   display: none;
 }
 
 .text {
-  color: rgb(0, 255, 200);
+  color: rgb(0, 0, 0);
 }
 
 .home_header {
@@ -396,13 +433,17 @@ textarea {
 
 .home_features_img {
   margin-top: 1rem;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
 }
 
 .home_features_item > p {
   line-height: 0;
   color: #00ff75;
+}
+
+.home_feature_item:hover{
+  cursor: pointer;
 }
 
 .home_tabs {
@@ -414,6 +455,9 @@ textarea {
 /* Assets */
 .assets {
   width: 100%;
+  max-height: 35vh;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .assets_item {
@@ -421,16 +465,17 @@ textarea {
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
   grid-area: 2rem;
-  border-top: 1px solid #00ff75;
+  border-top: 1px solid #000000;
   padding: 1rem 0;
 }
 
 .assets_item_img {
   width: 20px;
   height: 20px;
-  border: 1px solid #00ff75;
+  border: 1px solid #000;
   border-radius: 0.5rem;
   padding: 0.5rem;
+  background: rgb(183, 183, 183);
 }
 
 .activity {
@@ -438,7 +483,10 @@ textarea {
 }
 
 .import_token {
+  background-color: rgba(255, 255, 255, 0.771);
+  backdrop-filter: blur(100px);
   display: none;
+
 }
 
 .goBack {
@@ -461,11 +509,13 @@ textarea {
 
 .import_account {
   display: none;
+  background-color: rgba(255, 255, 255, 0.771);
+  backdrop-filter: blur(100px);
 }
 
 .lists {
   display: grid;
   grid-template-columns: 0.1fr 5fr;
-  border-bottom: 1px solid #00ff75;
+  border-bottom: 1px solid #000000;
   align-items: center;
 }

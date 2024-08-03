@@ -28,7 +28,11 @@ func CreateToken(c *fiber.Ctx) error {
 		return c.Status(500).SendString("Error creating token: " + err.Error())
 	}
 
-	return c.Status(200).SendString("Token created successfully")
+	return c.Status(200).JSON(fiber.Map{
+		"code":    200,
+		"status":  "OK",
+		"message": "created token successfully",
+	})
 }
 
 func GetAllToken(c *fiber.Ctx) error {

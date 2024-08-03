@@ -27,7 +27,11 @@ func CreateAcount(c *fiber.Ctx) error {
 		return c.Status(500).SendString("Error creating account: " + err.Error())
 	}
 
-	return c.Status(200).SendString("Account created successfully")
+	return c.Status(200).JSON(fiber.Map{
+		"code":    200,
+		"status":  "OK",
+		"message": "created account successfully",
+	})
 }
 
 func GetAllAccount(c *fiber.Ctx) error {
